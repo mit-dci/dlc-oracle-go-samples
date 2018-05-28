@@ -1,8 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"encoding/binary"
 	"fmt"
 	"log"
 	"os"
@@ -72,9 +70,7 @@ func main() {
 		}
 
 		// Convert numeric value to a byte array
-		var buf bytes.Buffer
-		binary.Write(&buf, binary.BigEndian, i)
-		message := buf.Bytes()
+		message := dlcoracle.GenerateNumericMessage(uint64(i))
 
 		// Sign the message
 		sig, err := dlcoracle.ComputeSignature(*key, privPoint, message)

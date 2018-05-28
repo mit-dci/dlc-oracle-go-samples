@@ -1,8 +1,6 @@
 package publisher
 
 import (
-	"bytes"
-	"encoding/binary"
 	"time"
 
 	"github.com/mit-dci/dlc-oracle-go-samples/restapi/crypto"
@@ -67,14 +65,9 @@ func Process() error {
 					continue
 				}
 
-				// Zero pad the value before signing. Sign expects a [32]byte message
-				var buf bytes.Buffer
-				binary.Write(&buf, binary.BigEndian, uint64(0))
-				binary.Write(&buf, binary.BigEndian, uint64(0))
-				binary.Write(&buf, binary.BigEndian, uint64(0))
-				binary.Write(&buf, binary.BigEndian, valueToPublish)
+				message := dlcoracle.GenerateNumericMessage(valueToPublish)
 
-				signature, err := dlcoracle.ComputeSignature(a, k, buf.Bytes())
+				signature, err := dlcoracle.ComputeSignature(a, k, message)
 				if err != nil {
 					logging.Error.Printf("Could not sign the message: %s", err.Error())
 					continue
