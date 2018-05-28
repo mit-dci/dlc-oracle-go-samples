@@ -5,9 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/gertjaap/dlcoracle/store"
-
-	"github.com/gertjaap/dlcoracle/logging"
+	"github.com/mit-dci/dlc-oracle-go-samples/restapi/logging"
+	"github.com/mit-dci/dlc-oracle-go-samples/restapi/store"
 
 	"github.com/gorilla/mux"
 )
