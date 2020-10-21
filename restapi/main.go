@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -17,7 +16,7 @@ import (
 	"github.com/awnumar/memguard"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/mit-dci/dlc-oracle-go"
+	dlcoracle "github.com/mit-dci/dlc-oracle-go"
 )
 
 func main() {
@@ -45,12 +44,11 @@ func main() {
 		os.Exit(1)
 	}
 	crypto.StoreKey(key)
-	// Tell memguard to listen out for interrupts, and cleanup in case of one.
-	memguard.CatchInterrupt(func() {
-		fmt.Println("Interrupt signal received. Exiting...")
-	})
-	// Make sure to destroy all LockedBuffers when returning.
-	defer memguard.DestroyAll()
+	// Safely terminate in case of an interrupt signal
+	memguard.CatchInterrupt()
+
+	// Purge the session when we return
+	defer memguard.Purge()
 
 	store.Init()
 	logging.Info.Println("Initialized store...")

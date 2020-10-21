@@ -1,8 +1,6 @@
 package crypto
 
 import (
-	"fmt"
-
 	"github.com/btcsuite/btcd/btcec"
 
 	"github.com/awnumar/memguard"
@@ -11,12 +9,7 @@ import (
 var safeKey *memguard.LockedBuffer
 
 func StoreKey(key *[32]byte) error {
-	newA, err := memguard.NewImmutableFromBytes(key[:])
-	if err != nil {
-		fmt.Println(err)
-		memguard.SafeExit(1)
-		return err
-	}
+	newA := memguard.NewBufferFromBytes(key[:])
 	safeKey = newA
 
 	return nil
@@ -24,7 +17,7 @@ func StoreKey(key *[32]byte) error {
 
 func RetrieveKey() *[32]byte {
 	key := new([32]byte)
-	copy(key[:], safeKey.Buffer())
+	copy(key[:], safeKey.String())
 	return key
 }
 
